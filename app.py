@@ -21,7 +21,7 @@ st.set_page_config(
 
 st.title("📰 Vinoth's Daily News")
 
-today_date = datetime.now().strftime("%d %B %Y")
+today_date = ist_now.strftime("%d %B %Y")
 from datetime import timedelta
 
 ist_now = datetime.utcnow() + timedelta(hours=5, minutes=30)
