@@ -74,7 +74,7 @@ ai_brief = generate_ai_brief(news)
 st.markdown("## 🧠 Today's AI Brief")
 
 for line in ai_brief:
-    st.markdown(f"- {line}")
+    st.markdown(line)
 
 st.markdown("---")
 
