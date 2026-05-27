@@ -1,3 +1,4 @@
+import streamlit.components.v1 as components
 import streamlit as st
 from fetch_news import fetch_news
 from ai_brief import generate_ai_brief
@@ -160,33 +161,43 @@ for tab, (tab_name, category) in zip(tabs, category_mapping.items()):
             st.info("No headlines found.")
 
 # Floating Scroll-to-Top Button
-st.markdown(
+
+components.html(
     """
     <style>
-    #top-button {
+    #scrollToTopBtn {
         position: fixed;
         bottom: 90px;
         right: 30px;
         z-index: 9999;
         background-color: #1f77b4;
         color: white;
-        text-decoration: none;
+        border: none;
         border-radius: 50%;
         width: 50px;
         height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 22px;
+        cursor: pointer;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    #top-button:hover {
+    #scrollToTopBtn:hover {
         background-color: #0d5ea8;
     }
     </style>
 
-    <a href="#top" id="top-button">⬆</a>
+    <button id="scrollToTopBtn">⬆</button>
+
+    <script>
+    const btn = document.getElementById("scrollToTopBtn");
+
+    btn.addEventListener("click", function() {
+        window.parent.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    </script>
     """,
-    unsafe_allow_html=True
+    height=0,
 )
