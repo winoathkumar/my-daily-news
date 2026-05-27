@@ -21,11 +21,15 @@ st.set_page_config(
 
 st.title("📰 Vinoth's Daily News")
 
-today_date = ist_now.strftime("%d %B %Y")
 from datetime import datetime, timedelta
 
+# IST Time
 ist_now = datetime.utcnow() + timedelta(hours=5, minutes=30)
 
+# Current date
+today_date = ist_now.strftime("%d %B %Y")
+
+# Refresh timestamp
 refresh_time = ist_now.strftime("%d %b %Y, %I:%M %p")
 
 col1, col2 = st.columns([4, 1])
