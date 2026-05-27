@@ -158,3 +158,35 @@ for tab, (tab_name, category) in zip(tabs, category_mapping.items()):
 
         else:
             st.info("No headlines found.")
+
+# Floating Scroll-to-Top Button
+st.markdown(
+    """
+    <style>
+    #top-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        background-color: #1f77b4;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    #top-button:hover {
+        background-color: #0d5ea8;
+    }
+    </style>
+
+    <button id="top-button" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+        ⬆
+    </button>
+    """,
+    unsafe_allow_html=True
+)
