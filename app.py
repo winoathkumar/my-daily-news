@@ -16,19 +16,35 @@ st.title("📰 Vinoth's Daily News")
 # Current date
 today_date = datetime.now().strftime("%d %B %Y")
 
-st.caption(f"Latest updated news for {today_date}")
+# Refresh button
+refresh = st.button("🔄 Refresh News")
 
-# Auto-fetch latest news
-news = fetch_news(today_date)
+# Last refreshed timestamp
+refresh_time = datetime.now().strftime("%d %b %Y, %I:%M %p")
+
+st.caption(f"Latest updated news for {today_date}")
+st.caption(f"Last refreshed: {refresh_time} IST")
+
+# Loading spinner
+with st.spinner("Fetching latest headlines..."):
+
+    news = fetch_news(today_date)
 
 # Display categories
 for category, articles in news.items():
 
-    with st.expander(f"{category} News ({len(articles)})", expanded=False):
+    # Sort latest first
+    sorted_articles = sorted(
+        articles,
+        key=lambda x: x["timestamp"],
+        reverse=True
+    )
 
-        if articles:
+    with st.expander(f"{category} News ({len(sorted_articles)})", expanded=False):
 
-            for i, article in enumerate(articles, start=1):
+        if sorted_articles:
+
+            for i, article in enumerate(sorted_articles, start=1):
 
                 time_only = article["timestamp"].split(",")[1].strip()
 
