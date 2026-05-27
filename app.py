@@ -4,77 +4,149 @@ from ai_brief import generate_ai_brief
 from datetime import datetime
 
 
-# Page configuration
+# ---------------------------------------------------
+# PAGE CONFIG
+# ---------------------------------------------------
+
 st.set_page_config(
     page_title="Vinoth's Daily News",
     page_icon="📰",
     layout="wide"
 )
 
-# App title
+
+# ---------------------------------------------------
+# HEADER
+# ---------------------------------------------------
+
 st.title("📰 Vinoth's Daily News")
 
-# Current date
 today_date = datetime.now().strftime("%d %B %Y")
-
-# Refresh button
-refresh = st.button("🔄 Refresh News")
-
-# Last refreshed timestamp
 refresh_time = datetime.now().strftime("%d %b %Y, %I:%M %p")
 
-st.caption(f"Latest updated news for {today_date}")
-st.caption(f"Last refreshed: {refresh_time} IST")
+col1, col2 = st.columns([4, 1])
 
-# Fetch news with loading spinner
+with col1:
+    st.caption(f"Latest updated news for {today_date}")
+    st.caption(f"🕒 Last refreshed: {refresh_time} IST")
+
+with col2:
+    refresh = st.button("🔄 Refresh")
+
+
+# ---------------------------------------------------
+# FETCH NEWS
+# ---------------------------------------------------
+
 with st.spinner("Fetching latest headlines..."):
 
     news = fetch_news(today_date)
 
-# Generate AI Brief
+
+# ---------------------------------------------------
+# AI BRIEF SECTION
+# ---------------------------------------------------
+
 ai_brief = generate_ai_brief(news)
 
-# Display AI Brief
-st.subheader("🧠 Today's AI News Brief")
+st.markdown("## 🧠 Today's AI Brief")
 
 for line in ai_brief:
-    st.write(line)
+    st.markdown(f"- {line}")
 
-st.write("---")
+st.markdown("---")
 
-# Display categorized news
-for category, articles in news.items():
 
-    # Sort latest-first
-    sorted_articles = sorted(
-        articles,
-        key=lambda x: datetime.strptime(
-            x["timestamp"],
-            "%d %b %Y, %I:%M %p"
-        ),
-        reverse=True
-    )
+# ---------------------------------------------------
+# CATEGORY TABS
+# ---------------------------------------------------
 
-    with st.expander(
-        f"{category} News ({len(sorted_articles)})",
-        expanded=False
-    ):
+tabs = st.tabs([
+    "🏙 Bengaluru",
+    "🌆 Karnataka",
+    "🇮🇳 National",
+    "🌍 World",
+    "⚽ Sports"
+])
+
+
+category_mapping = {
+    "🏙 Bengaluru": "Bengaluru",
+    "🌆 Karnataka": "Karnataka",
+    "🇮🇳 National": "National",
+    "🌍 World": "World",
+    "⚽ Sports": "Sports"
+}
+
+
+# ---------------------------------------------------
+# DISPLAY TAB CONTENT
+# ---------------------------------------------------
+
+for tab, (tab_name, category) in zip(tabs, category_mapping.items()):
+
+    with tab:
+
+        articles = news.get(category, [])
+
+        # Sort latest first
+        sorted_articles = sorted(
+            articles,
+            key=lambda x: datetime.strptime(
+                x["timestamp"],
+                "%d %b %Y, %I:%M %p"
+            ),
+            reverse=True
+        )
 
         if sorted_articles:
 
-            for i, article in enumerate(sorted_articles, start=1):
+            for article in sorted_articles:
 
-                # Extract only time portion
                 time_only = article["timestamp"].split(",")[1].strip()
 
+                # News card
                 st.markdown(
                     f"""
-                    **{i}. {article['title']}**  
-                    🕒 {time_only} | [🔗 Open]({article['link']})
-                    """
+                    <div style="
+                        padding:15px;
+                        border-radius:12px;
+                        border:1px solid #E0E0E0;
+                        margin-bottom:15px;
+                        background-color:#FFFFFF;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.05);
+                    ">
+
+                    <div style="
+                        font-size:18px;
+                        font-weight:600;
+                        margin-bottom:10px;
+                        color:#111111;
+                    ">
+                        {article['title']}
+                    </div>
+
+                    <div style="
+                        font-size:14px;
+                        color:gray;
+                        margin-bottom:10px;
+                    ">
+                        🕒 {time_only}
+                    </div>
+
+                    <a href="{article['link']}" target="_blank"
+                       style="
+                           text-decoration:none;
+                           color:#1f77b4;
+                           font-weight:600;
+                       ">
+                       🔗 Read Article
+                    </a>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
                 )
 
-                st.write("---")
-
         else:
-            st.write("No headlines found.")
+            st.info("No headlines found.")
