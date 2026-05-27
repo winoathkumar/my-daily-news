@@ -14,6 +14,17 @@ st.set_page_config(
     layout="wide"
 )
 
+# Smooth scrolling
+st.markdown(
+    """
+    <style>
+    html {
+        scroll-behavior: smooth;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # ---------------------------------------------------
 # IST TIME
