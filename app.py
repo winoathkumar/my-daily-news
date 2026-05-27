@@ -170,12 +170,14 @@ st.markdown(
         z-index: 9999;
         background-color: #1f77b4;
         color: white;
-        border: none;
+        text-decoration: none;
         border-radius: 50%;
         width: 50px;
         height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: 22px;
-        cursor: pointer;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
@@ -184,10 +186,7 @@ st.markdown(
     }
     </style>
 
-    <button id="top-button"
-        onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
-        ⬆
-    </button>
+    <a href="#top" id="top-button">⬆</a>
     """,
     unsafe_allow_html=True
 )
