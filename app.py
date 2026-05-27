@@ -53,7 +53,56 @@ with col1:
     st.caption(f"🕒 Last refreshed: {refresh_time} IST")
 
 with col2:
+    dark_mode = st.toggle("🌙 Dark")
     refresh = st.button("🔄 Refresh")
+
+# ---------------------------------------------------
+# DARK MODE STYLING
+# ---------------------------------------------------
+
+if dark_mode:
+
+    st.markdown(
+        """
+        <style>
+
+        .stApp {
+            background-color: #0E1117;
+            color: #FAFAFA;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #FAFAFA !important;
+        }
+
+        p, div, span, label {
+            color: #E0E0E0 !important;
+        }
+
+        a {
+            color: #4DA3FF !important;
+        }
+
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+else:
+
+    st.markdown(
+        """
+        <style>
+
+        .stApp {
+            background-color: #FFFFFF;
+            color: #111111;
+        }
+
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 # ---------------------------------------------------
@@ -135,7 +184,7 @@ for tab, (tab_name, category) in zip(tabs, category_mapping.items()):
                         border-radius:12px;
                         border:1px solid #E0E0E0;
                         margin-bottom:15px;
-                        background-color:#FFFFFF;
+                        background-color:{'#1E1E1E' if dark_mode else '#FFFFFF'};
                         box-shadow:0 2px 6px rgba(0,0,0,0.05);
                     ">
 
@@ -143,14 +192,14 @@ for tab, (tab_name, category) in zip(tabs, category_mapping.items()):
                         font-size:18px;
                         font-weight:600;
                         margin-bottom:10px;
-                        color:#111111;
+                        color:{'#FAFAFA' if dark_mode else '#111111'};
                     ">
                         {article['title']}
                     </div>
 
                     <div style="
                         font-size:14px;
-                        color:gray;
+                        color:{'#BBBBBB' if dark_mode else 'gray'};
                         margin-bottom:10px;
                     ">
                         🕒 {time_only}
