@@ -1,8 +1,7 @@
-import streamlit.components.v1 as components
 import streamlit as st
 from fetch_news import fetch_news
 from ai_brief import generate_ai_brief
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 # ---------------------------------------------------
@@ -17,21 +16,24 @@ st.set_page_config(
 
 
 # ---------------------------------------------------
+# IST TIME
+# ---------------------------------------------------
+
+ist_now = datetime.utcnow() + timedelta(hours=5, minutes=30)
+
+today_date = ist_now.strftime("%d %B %Y")
+
+refresh_time = ist_now.strftime("%d %b %Y, %I:%M %p")
+
+
+# ---------------------------------------------------
 # HEADER
 # ---------------------------------------------------
 
-st.title("📰 Vinoth's Daily News")
-
-from datetime import datetime, timedelta
-
-# IST Time
-ist_now = datetime.utcnow() + timedelta(hours=5, minutes=30)
-
-# Current date
-today_date = ist_now.strftime("%d %B %Y")
-
-# Refresh timestamp
-refresh_time = ist_now.strftime("%d %b %Y, %I:%M %p")
+st.markdown(
+    "<h1 id='vinoths-daily-news'>📰 Vinoth's Daily News</h1>",
+    unsafe_allow_html=True
+)
 
 col1, col2 = st.columns([4, 1])
 
@@ -98,7 +100,7 @@ for tab, (tab_name, category) in zip(tabs, category_mapping.items()):
 
         articles = news.get(category, [])
 
-        # Sort latest first
+        # Sort latest-first
         sorted_articles = sorted(
             articles,
             key=lambda x: datetime.strptime(
@@ -114,7 +116,7 @@ for tab, (tab_name, category) in zip(tabs, category_mapping.items()):
 
                 time_only = article["timestamp"].split(",")[1].strip()
 
-                # News card
+                # News card UI
                 st.markdown(
                     f"""
                     <div style="
@@ -160,44 +162,19 @@ for tab, (tab_name, category) in zip(tabs, category_mapping.items()):
         else:
             st.info("No headlines found.")
 
-# Floating Scroll-to-Top Button
+        # Back to Top
+        st.markdown("---")
 
-components.html(
-    """
-    <style>
-    #scrollToTopBtn {
-        position: fixed;
-        bottom: 90px;
-        right: 30px;
-        z-index: 9999;
-        background-color: #1f77b4;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        font-size: 22px;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-
-    #scrollToTopBtn:hover {
-        background-color: #0d5ea8;
-    }
-    </style>
-
-    <button id="scrollToTopBtn">⬆</button>
-
-    <script>
-    const btn = document.getElementById("scrollToTopBtn");
-
-    btn.addEventListener("click", function() {
-        window.parent.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-    </script>
-    """,
-    height=80,
-)
+        st.markdown(
+            """
+            <div style='text-align:center; padding:10px;'>
+                <a href='#vinoths-daily-news'
+                   style='text-decoration:none;
+                          font-weight:600;
+                          font-size:16px;'>
+                    ⬆ Back to Top
+                </a>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
