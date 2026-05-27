@@ -199,5 +199,5 @@ components.html(
     });
     </script>
     """,
-    height=0,
+    height=80,
 )
