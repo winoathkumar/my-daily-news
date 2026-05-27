@@ -36,8 +36,11 @@ for category, articles in news.items():
     # Sort latest first
     sorted_articles = sorted(
         articles,
-        key=lambda x: x["timestamp"],
-        reverse=True
+        key=lambda x: datetime.strptime(
+            x["timestamp"],
+            "%d %b %Y, %I:%M %p"
+        ),
+    reverse=True
     )
 
     with st.expander(f"{category} News ({len(sorted_articles)})", expanded=False):
